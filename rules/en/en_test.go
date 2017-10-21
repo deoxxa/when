@@ -6,7 +6,7 @@ import (
 
 	"github.com/olebedev/when"
 	"github.com/olebedev/when/rules/en"
-	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/assert"
 )
 
 var null = time.Date(2016, time.January, 6, 0, 0, 0, 0, time.UTC)
@@ -21,27 +21,27 @@ type Fixture struct {
 func ApplyFixtures(t *testing.T, name string, w *when.Parser, fixt []Fixture) {
 	for i, f := range fixt {
 		res, err := w.Parse(f.Text, null)
-		require.Nil(t, err, "[%s] err #%d", name, i)
-		require.NotNil(t, res, "[%s] res #%d", name, i)
-		require.Equal(t, f.Index, res.Index, "[%s] index #%d", name, i)
-		require.Equal(t, f.Phrase, res.Text, "[%s] text #%d", name, i)
-		require.Equal(t, f.Diff, res.Time.Sub(null), "[%s] diff #%d", name, i)
+		assert.Nil(t, err, "[%s] err #%d", name, i)
+		assert.NotNil(t, res, "[%s] res #%d", name, i)
+		assert.Equal(t, f.Index, res.Index, "[%s] index #%d", name, i)
+		assert.Equal(t, f.Phrase, res.Text, "[%s] text #%d", name, i)
+		assert.Equal(t, f.Diff, res.Time.Sub(null), "[%s] diff #%d (%q -> %s -> %s)", name, i, f.Phrase, res.Time.Sub(null).String(), res.Time.Format(time.RFC3339))
 	}
 }
 
 func ApplyFixturesNil(t *testing.T, name string, w *when.Parser, fixt []Fixture) {
 	for i, f := range fixt {
 		res, err := w.Parse(f.Text, null)
-		require.Nil(t, err, "[%s] err #%d", name, i)
-		require.Nil(t, res, "[%s] res #%d", name, i)
+		assert.Nil(t, err, "[%s] err #%d", name, i)
+		assert.Nil(t, res, "[%s] res #%d", name, i)
 	}
 }
 
 func ApplyFixturesErr(t *testing.T, name string, w *when.Parser, fixt []Fixture) {
 	for i, f := range fixt {
 		_, err := w.Parse(f.Text, null)
-		require.NotNil(t, err, "[%s] err #%d", name, i)
-		require.Equal(t, f.Phrase, err.Error(), "[%s] err text #%d", name, i)
+		assert.NotNil(t, err, "[%s] err #%d", name, i)
+		assert.Equal(t, f.Phrase, err.Error(), "[%s] err text #%d", name, i)
 	}
 }
 
